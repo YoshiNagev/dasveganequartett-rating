@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RatingsTable from "../../components/admin/RatingsTable";
+import StatsCards from "../../components/admin/StatsCards";
+import { getAdminStats, getRatingAverages } from "../../lib/statistics";
+
+const stats = await getAdminStats();
+const rows = await getRatingAverages();
+---
+
+<BaseLayout title="Ratings · Das Vegane Quartett Rating">
+  <h1 class="page-title">Durchschnittswerte</h1>
+
+  <StatsCards
+    sessionsCount={stats.sessionsCount}
+    ratingsCount={stats.ratingsCount}
+    completedFullSessions={stats.completedFullSessions}
+  />
+
+  <RatingsTable rows={rows} />
+</BaseLayout>

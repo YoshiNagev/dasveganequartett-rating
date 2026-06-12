@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import RatingsTable from "../../components/admin/RatingsTable";
+import ExportButton from "../../components/admin/ExportButton";
+import { getRatingAverages } from "../../lib/statistics";
+
+const rows = await getRatingAverages();
+---
+
+<BaseLayout title="CSV Export · Das Vegane Quartett Rating">
+  <h1 class="page-title">CSV Export</h1>
+
+  <div class="card" style="margin-bottom: 24px;">
+    <p>
+      Exportiert die aktuellen Durchschnittswerte aller 54 Argumente
+      inklusive Anzahl der Bewertungen pro Argument.
+    </p>
+
+    <ExportButton client:load rows={rows} />
+  </div>
+
+  <RatingsTable rows={rows} />
+</BaseLayout>

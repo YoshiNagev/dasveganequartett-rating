@@ -1,0 +1,25 @@
+{
+  "name": "dasveganequartett-rating",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@astrojs/react": "latest",
+    "@astrojs/vercel": "latest",
+    "@supabase/supabase-js": "latest",
+    "astro": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "typescript": "^6.0.3"
+  }
+}

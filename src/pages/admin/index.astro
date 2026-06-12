@@ -1,0 +1,36 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import StatsCards from "../../components/admin/StatsCards";
+import { getAdminStats } from "../../lib/statistics";
+
+const stats = await getAdminStats();
+---
+
+<BaseLayout title="Admin · Das Vegane Quartett Rating">
+  <h1 class="page-title">Admin</h1>
+
+  <StatsCards
+    sessionsCount={stats.sessionsCount}
+    ratingsCount={stats.ratingsCount}
+    completedFullSessions={stats.completedFullSessions}
+  />
+
+  <div class="card">
+    <p>
+      Hier kannst du die Rating-Ergebnisse auswerten,
+      Durchschnittswerte ansehen und CSV-Dateien exportieren.
+    </p>
+
+    <p>
+      <a class="button" href="/admin/ratings">Durchschnittswerte ansehen</a>
+    </p>
+
+    <p>
+      <a class="button secondary" href="/admin/sessions">Sessions ansehen</a>
+    </p>
+
+    <p>
+      <a class="button secondary" href="/admin/export">CSV Export</a>
+    </p>
+  </div>
+</BaseLayout>

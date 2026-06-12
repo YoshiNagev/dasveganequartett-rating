@@ -1,0 +1,13 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SessionsTable from "../../components/admin/SessionsTable";
+import { getSessions } from "../../lib/ratings";
+
+const sessions = await getSessions();
+---
+
+<BaseLayout title="Sessions · Das Vegane Quartett Rating">
+  <h1 class="page-title">Sessions</h1>
+
+  <SessionsTable sessions={sessions} />
+</BaseLayout>
