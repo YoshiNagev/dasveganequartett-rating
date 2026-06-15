@@ -121,19 +121,28 @@ export default function RatingPage() {
       try {
         const saved = loadProgress();
 
-        if (saved) {
-          const nextIndex = findFirstUnratedIndex(
-            saved.order,
-            saved.ratings
-          );
+        if (
+  saved &&
+  saved.sessionId &&
+  Array.isArray(saved.order) &&
+  saved.order.length === TOTAL_ARGUMENTS &&
+  saved.ratings
+) {
+  const nextIndex = findFirstUnratedIndex(
+    saved.order,
+    saved.ratings
+  );
 
-          setSessionId(saved.sessionId);
-          setOrder(saved.order);
-          setRatings(saved.ratings);
-          setCurrentIndex(nextIndex);
-          setIsLoaded(true);
-          return;
-        }
+  setSessionId(saved.sessionId);
+  setOrder(saved.order);
+  setRatings(saved.ratings);
+  setCurrentIndex(nextIndex);
+  setIsLoaded(true);
+  return;
+}
+
+clearProgress();
+
 
         const newSessionId = await createRatingSession();
         const newOrder = await createBalancedOrder();
