@@ -1,42 +1,63 @@
 import { supabase } from "./supabaseClient";
 import type { Rating } from "../types/Rating";
 
-export async function submitRatings(ratings: Rating[]) {
+export async function createRatingSession() {
   const sessionId = crypto.randomUUID();
 
-  const { error: sessionError } = await supabase
+  const { error } = await supabase
     .from("rating_sessions")
     .insert({
       id: sessionId,
-      completed_at: new Date().toISOString(),
+      started_at: new Date().toISOString(),
     });
 
-  if (sessionError) {
-    throw sessionError;
-  }
-
-  const rows = ratings.map((rating) => ({
-    session_id: sessionId,
-    argument_id: rating.argumentId,
-
-    verbreitung: rating.verbreitung,
-    komplexitaet: rating.komplexitaet,
-    emotionalitaet: rating.emotionalitaet,
-
-    delulu: rating.delulu,
-    ragebait: rating.ragebait,
-    ablenkung: rating.ablenkung,
-  }));
-
-  const { error: ratingsError } = await supabase
-    .from("ratings")
-    .insert(rows);
-
-  if (ratingsError) {
-    throw ratingsError;
+  if (error) {
+    throw error;
   }
 
   return sessionId;
+}
+
+export async function saveSingleRating(
+  sessionId: string,
+  rating: Rating
+) {
+  const { error } = await supabase
+    .from("ratings")
+    .upsert(
+      {
+        session_id: sessionId,
+        argument_id: rating.argumentId,
+
+        verbreitung: rating.verbreitung,
+        komplexitaet: rating.komplexitaet,
+        emotionalitaet: rating.emotionalitaet,
+
+        delulu: rating.delulu,
+        ragebait: rating.ragebait,
+        ablenkung: rating.ablenkung,
+      },
+      {
+        onConflict: "session_id,argument_id",
+      }
+    );
+
+  if (error) {
+    throw error;
+  }
+}
+
+export async function completeRatingSession(sessionId: string) {
+  const { error } = await supabase
+    .from("rating_sessions")
+    .update({
+      completed_at: new Date().toISOString(),
+    })
+    .eq("id", sessionId);
+
+  if (error) {
+    throw error;
+  }
 }
 
 export async function getRawRatings() {
@@ -56,7 +77,7 @@ export async function getSessions() {
   const { data, error } = await supabase
     .from("rating_sessions")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("started_at", { ascending: false });
 
   if (error) {
     throw error;

@@ -1,19 +1,19 @@
+import type { Rating } from "../types/Rating";
+
 const STORAGE_KEY = "dvq-rating-progress";
 
-export function saveProgress(
-  currentArgument: number,
-  ratings: Record<number, any>
-) {
-  localStorage.setItem(
-    STORAGE_KEY,
-    JSON.stringify({
-      currentArgument,
-      ratings,
-    })
-  );
+export type LocalProgress = {
+  sessionId: string;
+  currentIndex: number;
+  order: number[];
+  ratings: Record<number, Rating>;
+};
+
+export function saveProgress(progress: LocalProgress) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
 }
 
-export function loadProgress() {
+export function loadProgress(): LocalProgress | null {
   const raw = localStorage.getItem(STORAGE_KEY);
 
   if (!raw) {
